@@ -93,6 +93,7 @@ class Calendar(Cog, name="iCal Creator"):
         Returns:
             list: List of dicts that represent events in the guild
         """
+        response_list = []
         async with ClientSession(headers=self.auth_headers) as session:
             try:
                 async with session.get(self.event_url) as response:
