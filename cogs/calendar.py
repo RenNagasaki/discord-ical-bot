@@ -131,7 +131,7 @@ class Calendar(Cog, name="iCal Creator"):
         embed.add_field(name="Ende", value=end_time, inline=True)
 
         logging.info("Sending message")
-        await self.bot.message_channel.send(embed=embed)
+        await self.bot.message_channel.send(embed)
         logging.info("Created message successfully")
 
 
