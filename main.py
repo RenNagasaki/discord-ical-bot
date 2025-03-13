@@ -15,9 +15,10 @@ def main() -> None:
     GUILD_ID = env.str("GUILD_ID")
     ICAL_URL = env.str("ICAL_URL")
     CHANNEL_ID = env.str("CHANNEL_ID")
+    CAL_CHANNEL_ID = env.str("CAL_CHANNEL_ID")
 
     bot = MyBot(token=BOT_TOKEN, guild=GUILD_ID, command_prefix="$")
-    bot.add_cog(Calendar(bot, ICAL_URL, CHANNEL_ID))
+    bot.add_cog(Calendar(bot, ICAL_URL, CHANNEL_ID, CAL_CHANNEL_ID))
     bot.run(BOT_TOKEN)
 
 

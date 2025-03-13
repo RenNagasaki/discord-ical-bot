@@ -13,7 +13,7 @@ class Calendar(Cog, name="iCal Creator"):
     TIME_FORMAT = "%Y-%m-%dT%H:%M:%S"
     TIME_ZONE = "+00"
 
-    def __init__(self, bot, iCal_url: str, channel_id: str) -> None:
+    def __init__(self, bot, iCal_url: str, channel_id: str, cal_channel_id: str) -> None:
         """
         Summary:
         Initializes the Calendar cog
@@ -32,6 +32,7 @@ class Calendar(Cog, name="iCal Creator"):
             "Content-Type": "application/json",
         }
         self.iCal_url = iCal_url
+        self.channel = bot.get_channel(cal_channel_id)
         self.event_url = f"{self.base_api_url}/guilds/{bot.guild}/scheduled-events"
         self.create_event.start()
 
@@ -66,7 +67,15 @@ class Calendar(Cog, name="iCal Creator"):
                     end_time=iEvent.end.strftime(self.TIME_FORMAT + self.TIME_ZONE),
                     channel_id=self.channel_id,
                     type_id=event_type,
-                    metadata={"location": iEvent.location or "¯\\_(ツ)_/¯"},
+                    metadata={"location": iEvent.location or "¯\\_(ツ)_/¯"}
+                )
+
+                logging.info("Creating discord message %s", iEvent.summary)
+                await self.create_channel_message(
+                    name=iEvent.summary,
+                    description=iEvent.description,
+                    start_time=iEvent.start.strftime(self.TIME_FORMAT + self.TIME_ZONE),
+                    end_time=iEvent.end.strftime(self.TIME_FORMAT + self.TIME_ZONE)
                 )
             else:
                 logging.info("Event already exists")
@@ -94,6 +103,34 @@ class Calendar(Cog, name="iCal Creator"):
             finally:
                 await session.close()
         return response_list
+
+    async def create_channel_message(
+        self,
+        name: str,
+        description: str,
+        start_time: str,
+        end_time: str
+    ) -> None:
+        """
+        Summary:
+        Creates a guild event using the supplied arguments.
+
+        Args:
+            name: Name of the event
+            description: Description of the event
+            start_time: %Y-%m-%dT%H:%M:%S.000Z - Start time of the event
+            end_time: %Y-%m-%dT%H:%M:%S.000Z - End time of the event
+            metadata: metadata={'location': 'YOUR_LOCATION_NAME'} - Dictionary of metadata for the event
+            channel_id: ID of the channel the event takes place in
+            type_id: Type of event (2 = Voice Event, 3 = External Event)
+            privacy_level: Privacy level of the event 2 = default
+        """
+        embed = discord.Embed(title=name,description=description, color=0xFF0000)
+        embed.add_field(name="Start", value=start_time,inline=True)
+        embed.add_field(name="Ende", value=end_time,inline=True)
+
+        await channel.message.send(embed=embed)
+
 
     async def create_guild_event(
         self,
