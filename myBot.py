@@ -1,5 +1,6 @@
 from discord.ext.commands import Bot
 import logging
+import discord
 
 
 class MyBot(Bot):
@@ -14,7 +15,8 @@ class MyBot(Bot):
             command_prefix: [$,!,>,etc.] prefix for commands
             **options:
         """
-        super().__init__(command_prefix, **options)
+        intents = discord.Intents.all()
+        super().__init__(command_prefix, **options, intents=intents)
         self.token = token
         self.guild = guild
         self.cal_channel_id = cal_channel_id
