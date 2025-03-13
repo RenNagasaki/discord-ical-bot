@@ -33,7 +33,7 @@ class Calendar(Cog, name="iCal Creator"):
             "Content-Type": "application/json",
         }
         self.iCal_url = iCal_url
-        self.channel = bot.get_channel(cal_channel_id)
+        self.cal_channel_id = cal_channel_id
         self.event_url = f"{self.base_api_url}/guilds/{bot.guild}/scheduled-events"
         self.create_event.start()
 
@@ -116,24 +116,26 @@ class Calendar(Cog, name="iCal Creator"):
     ) -> None:
         """
         Summary:
-        Creates a guild event using the supplied arguments.
+        Creates discord message using the supplied arguments.
 
         Args:
             name: Name of the event
             description: Description of the event
             start_time: %Y-%m-%dT%H:%M:%S.000Z - Start time of the event
             end_time: %Y-%m-%dT%H:%M:%S.000Z - End time of the event
-            metadata: metadata={'location': 'YOUR_LOCATION_NAME'} - Dictionary of metadata for the event
-            channel_id: ID of the channel the event takes place in
-            type_id: Type of event (2 = Voice Event, 3 = External Event)
-            privacy_level: Privacy level of the event 2 = default
         """
+        logging.info("Waiting for bot to be ready")
         await self.bot.wait_until_ready()
+        logging.info("Getting channel: " + self.cal_channel_id)
+        channel = self.bot.get_channel(self.cal_channel_id)
+        logging.info("Creating embed")
         embed = discord.Embed(title=name,description=description, color=0xFF0000)
-        embed.add_field(name="Start", value=start_time,inline=True)
-        embed.add_field(name="Ende", value=end_time,inline=True)
+        embed.add_field(name="Start", value=start_time, inline=True)
+        embed.add_field(name="Ende", value=end_time, inline=True)
 
-        await self.channel.send(embed=embed)
+        logging.info("Sending message")
+        await channel.send(embed=embed)
+        logging.info("Created message successfully")
 
 
     async def create_guild_event(
