@@ -28,4 +28,4 @@ class MyBot(Bot):
         """
         logging.info("Logged in as %s", self.user)
         logging.info("Getting channel: " + self.cal_channel_id.__str__())
-        self.message_channel = self.fetch_channel(self.cal_channel_id)
+        self.message_channel = self.get_channel(self.cal_channel_id)
