@@ -14,7 +14,7 @@ class Calendar(Cog, name="iCal Creator"):
     TIME_FORMAT = "%Y-%m-%dT%H:%M:%S"
     TIME_ZONE = "+00"
 
-    def __init__(self, bot, iCal_url: str, channel_id: str, cal_channel_id: str) -> None:
+    def __init__(self, bot, iCal_url: str, channel_id: str) -> None:
         """
         Summary:
         Initializes the Calendar cog
