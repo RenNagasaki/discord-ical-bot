@@ -53,6 +53,7 @@ class Calendar(Cog, name="iCal Creator"):
             logging.info("Fetched iCal events")
         server_events = await self.get_guild_events()
         for iEvent in iCal_events:
+            logging.info("Found event %s", iEvent.summary)
             if iEvent.summary not in [event["name"] for event in server_events]:
                 if iEvent.location is None or iEvent.location.lower() == "discord" or iEvent.location == "":
                     event_type = 2
