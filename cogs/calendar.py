@@ -7,6 +7,7 @@ from json import loads, dumps
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import logging
+import time
 
 
 class Calendar(Cog, name="iCal Creator"):
@@ -80,6 +81,7 @@ class Calendar(Cog, name="iCal Creator"):
                 )
             else:
                 logging.info("Event already exists")
+            time.sleep(5)
 
     @create_event.before_loop
     async def before_printer(self) -> None:
@@ -126,12 +128,12 @@ class Calendar(Cog, name="iCal Creator"):
         logging.info("Waiting for bot to be ready")
         await self.bot.wait_until_ready()
         logging.info("Creating embed")
-        embed = discord.Embed(title=name,description=description, color=0xFF0000)
-        embed.add_field(name="Start", value=start_time, inline=True)
-        embed.add_field(name="Ende", value=end_time, inline=True)
+        embed1 = discord.Embed(title=name,description=description, color=0xFF0000)
+        embed1.add_field(name="Start", value=start_time, inline=True)
+        embed1.add_field(name="Ende", value=end_time, inline=True)
 
         logging.info("Sending message")
-        await self.bot.message_channel.send(embed)
+        await self.bot.message_channel.send(embed=embed1)
         logging.info("Created message successfully")
 
 
