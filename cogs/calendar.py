@@ -1,6 +1,7 @@
 from icalevents.icalevents import events
 from discord.ext.commands import Cog
 from discord.ext.tasks import loop
+import discord
 from aiohttp import ClientSession, ClientResponseError
 from json import loads, dumps
 from datetime import datetime
@@ -127,11 +128,12 @@ class Calendar(Cog, name="iCal Creator"):
             type_id: Type of event (2 = Voice Event, 3 = External Event)
             privacy_level: Privacy level of the event 2 = default
         """
+        await self.bot.wait_until_ready()
         embed = discord.Embed(title=name,description=description, color=0xFF0000)
         embed.add_field(name="Start", value=start_time,inline=True)
         embed.add_field(name="Ende", value=end_time,inline=True)
 
-        await channel.message.send(embed=embed)
+        await self.channel.send(embed=embed)
 
 
     async def create_guild_event(
