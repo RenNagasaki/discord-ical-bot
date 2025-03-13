@@ -33,7 +33,8 @@ class Calendar(Cog, name="iCal Creator"):
             "Content-Type": "application/json",
         }
         self.iCal_url = iCal_url
-        self.cal_channel_id = cal_channel_id
+        logging.info("Getting channel: " + cal_channel_id)
+        self.channel = self.bot.fetch_channel(cal_channel_id)
         self.event_url = f"{self.base_api_url}/guilds/{bot.guild}/scheduled-events"
         self.create_event.start()
 
@@ -126,15 +127,13 @@ class Calendar(Cog, name="iCal Creator"):
         """
         logging.info("Waiting for bot to be ready")
         await self.bot.wait_until_ready()
-        logging.info("Getting channel: " + self.cal_channel_id)
-        channel = self.bot.get_channel(self.cal_channel_id)
         logging.info("Creating embed")
         embed = discord.Embed(title=name,description=description, color=0xFF0000)
         embed.add_field(name="Start", value=start_time, inline=True)
         embed.add_field(name="Ende", value=end_time, inline=True)
 
         logging.info("Sending message")
-        await channel.send(embed=embed)
+        await self.channel.send(embed=embed)
         logging.info("Created message successfully")
 
 
