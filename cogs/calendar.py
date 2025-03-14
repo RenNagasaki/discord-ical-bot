@@ -38,7 +38,7 @@ class Calendar(Cog, name="iCal Creator"):
         self.create_event.start()
 
     # Runs every five minutes
-    @loop(minutes=5)
+    @loop(minutes=60)
     async def create_event(self) -> None:
         """
         Summary:
