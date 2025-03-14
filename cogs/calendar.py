@@ -61,25 +61,28 @@ class Calendar(Cog, name="iCal Creator"):
                 else:
                     event_type = 3
 
-                logging.info("Creating event %s", iEvent.summary)
-                await self.create_guild_event(
-                    name=iEvent.summary,
-                    description=iEvent.description,
-                    start_time=iEvent.start.strftime(self.TIME_FORMAT + self.TIME_ZONE),
-                    end_time=iEvent.end.strftime(self.TIME_FORMAT + self.TIME_ZONE),
-                    channel_id=self.channel_id,
-                    type_id=event_type,
-                    metadata={"location": iEvent.location or "¯\\_(ツ)_/¯"}
-                )
+                try:
+                    logging.info("Creating event %s", iEvent.summary)
+                    await self.create_guild_event(
+                        name=iEvent.summary,
+                        description=iEvent.description,
+                        start_time=iEvent.start.strftime(self.TIME_FORMAT + self.TIME_ZONE),
+                        end_time=iEvent.end.strftime(self.TIME_FORMAT + self.TIME_ZONE),
+                        channel_id=self.channel_id,
+                        type_id=event_type,
+                        metadata={"location": iEvent.location or "¯\\_(ツ)_/¯"}
+                    )
 
-                logging.info("Creating discord message %s", iEvent.summary)
-                await self.create_channel_message(
-                    name=iEvent.summary,
-                    description=iEvent.description,
-                    start_time=iEvent.start.strftime(self.TIME_FORMAT + self.TIME_ZONE),
-                    end_time=iEvent.end.strftime(self.TIME_FORMAT + self.TIME_ZONE)
-                )
-                time.sleep(5)
+                    logging.info("Creating discord message %s", iEvent.summary)
+                    await self.create_channel_message(
+                        name=iEvent.summary,
+                        description=iEvent.description,
+                        start_time=iEvent.start.strftime(self.TIME_FORMAT + self.TIME_ZONE),
+                        end_time=iEvent.end.strftime(self.TIME_FORMAT + self.TIME_ZONE)
+                    )
+                    time.sleep(5)
+                except ClientResponseError:
+                    logging.error("Failed to create event and message")
             else:
                 logging.info("Event already exists")
 
