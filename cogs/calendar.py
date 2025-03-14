@@ -79,9 +79,9 @@ class Calendar(Cog, name="iCal Creator"):
                     start_time=iEvent.start.strftime(self.TIME_FORMAT + self.TIME_ZONE),
                     end_time=iEvent.end.strftime(self.TIME_FORMAT + self.TIME_ZONE)
                 )
+                time.sleep(5)
             else:
                 logging.info("Event already exists")
-            time.sleep(5)
 
     @create_event.before_loop
     async def before_printer(self) -> None:
